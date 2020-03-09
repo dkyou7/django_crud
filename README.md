@@ -1,4 +1,6 @@
-# django_crud 만들어보기
+[toc]
+
+# [Django] CRUD 만들어보기
 
 ## 1. VSCODE에서 가상환경 설치 및 서버 실행해보기
 
@@ -94,7 +96,7 @@ $ python manage.py migrate
 
 ![image](https://user-images.githubusercontent.com/26649731/76175879-e9751b00-61f1-11ea-88ec-9210a480035c.png)
 
-## 3. Model 코딩
+## 3. [M]odel 코딩
 
 - CRUD를 위한 모델을 코딩해야 한다.
 
@@ -175,4 +177,14 @@ class PostAdmin(admin.ModelAdmin):
 ```
 
 ![image](https://user-images.githubusercontent.com/26649731/76182129-08ca7300-6207-11ea-908b-227d2eca1ad6.png)
+
+## 4. [V]iew 코딩
+
+- 뷰 작성 -> url 작성으로 순서를 진행해본다.
+- 뷰 작성은 generic 뷰를 사용할 것이다.~~클래스뷰 자료는 많이 없다.~~
+  - 그래서 클래스 뷰로 코딩해보기로 했다!!
+- create 이후에 details 로 가고싶은데 어떻게 해야할지 모르겠다. 이거 공부해보기!
+- 지금은 create 이후 바로 리스트를 띄워준다.
+
+## 5. [T]emplates 코딩
 

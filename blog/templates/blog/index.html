@@ -1,0 +1,10 @@
+{% for post in list %}
+<!-- url 'details' post.pk // url 'urls.py에 연결된 name=옵션의 이름' (parameter 값) -->
+<h1><a href="{% url 'details' post.pk %}">{{post.title}}</a></h1>
+<p>{{post.content}}</p>
+{% if post.img %}
+    <img src="{{post.img.url}}">
+{% endif %}
+{% endfor %}
+
+<a href="{% url 'create' %}">글쓰기</a>
