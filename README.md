@@ -183,8 +183,141 @@ class PostAdmin(admin.ModelAdmin):
 - 뷰 작성 -> url 작성으로 순서를 진행해본다.
 - 뷰 작성은 generic 뷰를 사용할 것이다.~~클래스뷰 자료는 많이 없다.~~
   - 그래서 클래스 뷰로 코딩해보기로 했다!!
+
+### 4.1 CBV(Class-Based View) 코딩
+
 - create 이후에 details 로 가고싶은데 어떻게 해야할지 모르겠다. 이거 공부해보기!
-- 지금은 create 이후 바로 리스트를 띄워준다.
+- 지금은 create 이후 바로 리스트를 띄워준다. 아직 해결 못함..
+
+- 클래스 뷰를 이용하기 위해서는 장고에서 클래스뷰를 어떻게 활용했는지 알아야 한다.
+
+```python
+from django.shortcuts import render
+
+from django.views.generic.list import ListView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.views.generic.detail import DetailView
+
+from django.urls import reverse_lazy
+
+from .models import Post
+
+# Create your views here.
+class PostList(ListView):
+    model = Post
+    template_name='blog/index.html'
+    context_object_name = 'list'
+
+class PostDetail(DetailView):
+    model = Post
+    template_name = 'blog/detail.html'
+    context_object_name = 'detail'
+
+class PostCreate(CreateView):
+    model = Post
+    fields = "__all__"
+    template_name = 'blog/create.html'
+    success_url = reverse_lazy("create_done")
+
+class PostCreateDone(DetailView):
+    model = Post
+    template_name = 'blog/create_done.html'
+
+class PostCreateDone(ListView):
+    model = Post
+    template_name = 'blog/create_done.html'
+    context_object_name = 'createDone'      # 디폴트 컨텍스트 변수명 :  createDone
+
+class PostUpdate(UpdateView):
+    model = Post
+    fields = '__all__'
+    template_name = 'blog/update.html'
+    success_url = reverse_lazy('posts')
+
+class PostDelete(DeleteView):
+    model = Post
+    template_name = 'blog/delete.html'
+    success_url = reverse_lazy('posts')         # 모든 처리가 다 끝나고 나서 어디로 이동할 것인가?
+```
+
+```python
+from django.urls import path,reverse_lazy
+from .views import PostList,PostDetail,PostCreate,PostUpdate,PostDelete,PostCreateDone
+
+urlpatterns = [
+    path('',PostList.as_view(),name='posts'),
+    path('<int:pk>/',PostDetail.as_view(),name='details'),
+    path('create/',PostCreate.as_view(),name='create'),
+    path('createDone/',PostCreateDone.as_view(),name='create_done'),
+    path('update/<int:pk>/',PostUpdate.as_view(),name='update'),
+    path('delete/<int:pk>/',PostDelete.as_view(),name='delete'),
+]
+
+```
+
+### 4.2 FBV(Function-Based View) 코딩
+
+
 
 ## 5. [T]emplates 코딩
+
+- update, delete, create 같은 경우에는 form 문을 사용하였다.
+
+- list, detail 같은 경우 `{}` `{%%}` 을 적절히 활용하여 데이터 표기를 진행하였다.
+
+- Create
+
+```html
+<!-- blog/create.html -->
+
+<form action="" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{form.as_p}}
+    <input type="submit" class="btn btn-primary" value="제출">
+</form>
+```
+
+```html
+<!-- blog/create_done.html -->
+
+<h1>글 등록 성공!</h1>
+{{object.title}}
+<a href="{% url 'posts' %}">목록으로</a>
+```
+
+- Read
+
+```html
+<!-- blog/detail.html -->
+
+<div>제목 : {{detail.title}}</div><br>
+내용 : {{detail.content}}
+
+<a href="{% url 'update' detail.id %}">수정하기</a>
+<a href="{% url 'delete' detail.id %}">삭제하기</a>
+```
+
+- update
+
+```html
+<!-- blog/update.html -->
+
+<form action="" method="post">
+    {% csrf_token %}
+    {{form.as_p}}
+    <input type="submit" value="Update" class="btn btn-info btn-sm">
+</form>
+```
+
+- delete
+
+```html
+<!-- blog/delete.html -->
+
+<form action="" method="post">
+    {% csrf_token %}
+    <div class="alert alert-danger">Do you want to delete Post  "{{object.title}}"?</div>
+    <input type="submit" value="Delete" class="btn btn-danger">
+</form>
+```
 

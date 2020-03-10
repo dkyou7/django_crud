@@ -1,1 +1,5 @@
-{{detail.title}}
+<div>제목 : {{detail.title}}</div><br>
+내용 : {{detail.content}}
+
+<a href="{% url 'update' detail.id %}">수정하기</a>
+<a href="{% url 'delete' detail.id %}">삭제하기</a>
