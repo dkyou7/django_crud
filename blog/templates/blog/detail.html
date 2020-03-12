@@ -1,5 +1,8 @@
 <div>제목 : {{detail.title}}</div><br>
-내용 : {{detail.content}}
-
-<a href="{% url 'update' detail.id %}">수정하기</a>
-<a href="{% url 'delete' detail.id %}">삭제하기</a>
+<div>내용 : {{detail.content}}</div><br>
+{% if detail.img %}
+<div>이미지 : <img src='{{detail.img.url}}'></div>
+{% endif %}
+<a href="{% url 'update' detail.pk %}">수정하기</a>
+<a href="{% url 'delete' detail.pk %}">삭제하기</a>
+<a href="{% url 'posts' %}">목록으로</a>

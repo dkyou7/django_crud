@@ -1,3 +1,11 @@
 <h1>글 등록 성공!</h1>
-{{object.title}}
+<p>{{hello.title}}</p>
+<p>{{hello.content}}</p>
+{% if hello.img %}
+    <img src="{{hello.img.url}}">
+{% endif %}
+{% if hello.test %}
+    <p>이미지!!</p>
+    <img src="{{hello.test.url}}">
+{% endif %}
 <a href="{% url 'posts' %}">목록으로</a>
